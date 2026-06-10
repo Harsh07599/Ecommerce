@@ -1,0 +1,100 @@
+.orders-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  h2 { margin: 0; font-size: 22px; font-weight: 600; }
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .filter-label { font-weight: 500; color: #555; }
+
+  button { border-radius: 20px !important; }
+
+  button.active {
+    background: #3f51b5;
+    color: white;
+  }
+}
+
+.date-filter {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.orders-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  transition: grid-template-columns 0.3s ease;
+
+  &.panel-open {
+    grid-template-columns: 1fr 380px;
+  }
+}
+
+.table-wrapper { border-radius: 8px; overflow: hidden; }
+
+table { width: 100%; }
+
+.clickable-row {
+  cursor: pointer;
+  &:hover { background: #f5f5f5; }
+}
+
+.status-chip {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.status-pending   { background: #fff3e0; color: #e65100; }
+  &.status-confirmed { background: #e8f5e9; color: #2e7d32; }
+  &.status-cancelled { background: #fce4ec; color: #b71c1c; }
+}
+
+.empty-state { text-align: center; padding: 32px !important; color: #999; }
+
+/* Order Detail Side Panel */
+.order-detail-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: fit-content;
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h3 { margin: 0; }
+  }
+}
+
+.line-items { display: flex; flex-direction: column; gap: 8px; }
+
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.order-total {
+  text-align: right;
+  font-size: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+}
+
+.full-width { width: 100%; }

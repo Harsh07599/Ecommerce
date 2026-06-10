@@ -1,0 +1,62 @@
+<div [formGroup]="formGroup" class="dynamic-form">
+
+  @for (field of config; track field.name) {
+
+    <!-- Only render the field if visibleWhen condition is met (or no condition) -->
+    @if (isVisible(field)) {
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+
+        <!-- Textarea -->
+        @if (field.type === 'textarea') {
+          <textarea matInput
+                    [formControlName]="field.name"
+                    [placeholder]="field.placeholder || ''"
+                    [id]="'field-' + field.name"
+                    rows="3">
+          </textarea>
+        }
+
+        <!-- Select (dropdown) -->
+        @else if (field.type === 'select') {
+          <mat-select [formControlName]="field.name"
+                      [id]="'field-' + field.name">
+            @for (option of field.options; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-select>
+        }
+
+        <!-- All other input types (text, email, tel, number) -->
+        @else {
+          <input matInput
+                 [type]="field.type"
+                 [formControlName]="field.name"
+                 [placeholder]="field.placeholder || ''"
+                 [id]="'field-' + field.name" />
+        }
+
+        <!-- Validation error messages -->
+        @if (getControl(field.name)?.invalid && getControl(field.name)?.touched) {
+          <mat-error>
+            @if (getControl(field.name)?.errors?.['required']) {
+              {{ field.label }} is required
+            }
+            @if (getControl(field.name)?.errors?.['email']) {
+              Enter a valid email address
+            }
+            @if (getControl(field.name)?.errors?.['minlength']) {
+              Too short
+            }
+            @if (getControl(field.name)?.errors?.['pattern']) {
+              Invalid format
+            }
+          </mat-error>
+        }
+
+      </mat-form-field>
+    }
+  }
+
+</div>

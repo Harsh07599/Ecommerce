@@ -1,0 +1,90 @@
+<div class="catalogue-page">
+  <h1>Product Catalogue</h1>
+
+  <!-- Filters -->
+  <div class="filters-section" [formGroup]="filterForm">
+
+    <!-- Search -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search products</mat-label>
+      <input matInput formControlName="search" placeholder="Search..." id="catalogue-search" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <!-- In-stock toggle -->
+    <mat-slide-toggle formControlName="inStockOnly" id="instock-toggle">
+      In Stock Only
+    </mat-slide-toggle>
+
+    <!-- Category chips -->
+    <div class="category-chips">
+      <button mat-stroked-button
+              [class.active]="!filterForm.value.category"
+              (click)="selectCategory('')" id="cat-all">
+        All
+      </button>
+      @for (cat of categories(); track cat) {
+        <button mat-stroked-button
+                [class.active]="filterForm.value.category === cat"
+                (click)="selectCategory(cat)"
+                [id]="'cat-' + cat">
+          {{ cat }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Loading Skeletons -->
+  @if (isLoading()) {
+    <div class="product-grid">
+      @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line wide"></div>
+          <div class="skeleton-line medium"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Error State with retry -->
+  @if (hasError()) {
+    <div class="error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>Failed to load products.</p>
+      <button mat-raised-button color="primary" (click)="loadProducts()" id="retry-btn">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && !hasError() && displayedProducts().length === 0) {
+    <div class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <p>No products match your filters.</p>
+    </div>
+  }
+
+  <!-- Product Grid -->
+  @if (!isLoading() && !hasError() && displayedProducts().length > 0) {
+    <div class="product-grid">
+      @for (product of displayedProducts(); track product.id) {
+        <app-product-card
+          [product]="product"
+          [liveStock]="getLiveStock(product)"
+          (cardClick)="navigateToProduct(product.id)">
+        </app-product-card>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="total()"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[12, 24, 48]"
+      (page)="onPageChange($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  }
+</div>

@@ -1,0 +1,130 @@
+.detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.product-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main-image {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  max-height: 400px;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h1 { margin: 0; font-size: 26px; font-weight: 700; }
+}
+
+.category-tag {
+  background: #e8eaf6;
+  color: #3f51b5;
+  padding: 2px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: 700;
+  color: #3f51b5;
+  margin: 0;
+}
+
+.description { color: #555; line-height: 1.6; margin: 0; }
+
+.stock-info {
+  font-weight: 600;
+  color: #2e7d32;
+  margin: 0;
+
+  &.out-of-stock { color: #b71c1c; }
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .qty-value {
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 32px;
+    text-align: center;
+  }
+}
+
+.add-to-cart-btn, .notify-btn {
+  height: 48px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px !important;
+}
+
+/* Related products */
+.related-section h2 { font-size: 20px; font-weight: 600; margin: 0 0 16px; }
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.related-card {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  }
+
+  img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .rel-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 8px 0 4px;
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .rel-price {
+    color: #3f51b5;
+    font-weight: 700;
+    margin: 0;
+    font-size: 14px;
+  }
+}

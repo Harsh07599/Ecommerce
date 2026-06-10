@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "name": "Alice Admin",
+    "email": "alice@admin.com",
+    "passwordHash": "$2b$10$1vgjCr361uUgHwu6H6qTxOMSTyivgh9.QVhfDx18HWgnoL1ZAn3Ou",
+    "role": "admin"
+  },
+  {
+    "id": "2",
+    "name": "Bob Admin",
+    "email": "bob@admin.com",
+    "passwordHash": "$2b$10$1vgjCr361uUgHwu6H6qTxOMSTyivgh9.QVhfDx18HWgnoL1ZAn3Ou",
+    "role": "admin"
+  },
+  {
+    "id": "3",
+    "name": "Charlie User",
+    "email": "charlie@user.com",
+    "passwordHash": "$2b$10$8Qdj6PHMu/DzC/atYV9f4e8ja.N268u7r4Nzr3swB6uJSRHz4CdCK",
+    "role": "user"
+  },
+  {
+    "id": "4",
+    "name": "Diana User",
+    "email": "diana@user.com",
+    "passwordHash": "$2b$10$8Qdj6PHMu/DzC/atYV9f4e8ja.N268u7r4Nzr3swB6uJSRHz4CdCK",
+    "role": "user"
+  }
+]

@@ -1,0 +1,88 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <!-- Header -->
+    <mat-card-header>
+      <div class="login-header">
+        <mat-icon class="logo-icon">shopping_bag</mat-icon>
+        <h1 class="login-title">Welcome Back</h1>
+        <p class="login-subtitle">Sign in to continue to the store</p>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+        <!-- Email Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email"
+                 placeholder="you@example.com" id="login-email" />
+          <mat-icon matPrefix>email</mat-icon>
+          @if (emailControl.invalid && emailControl.touched) {
+            <mat-error>
+              @if (emailControl.errors?.['required']) { Email is required }
+              @if (emailControl.errors?.['email']) { Enter a valid email address }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput
+                 [type]="showPassword() ? 'text' : 'password'"
+                 formControlName="password"
+                 placeholder="••••••••"
+                 id="login-password" />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button"
+                  (click)="togglePassword()" [attr.aria-label]="'Toggle password visibility'">
+            <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (passwordControl.invalid && passwordControl.touched) {
+            <mat-error>
+              @if (passwordControl.errors?.['required']) { Password is required }
+              @if (passwordControl.errors?.['minlength']) { Minimum 6 characters }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Error Message -->
+        @if (errorMessage()) {
+          <div class="error-banner" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <!-- Loading Skeleton (shown during the 600ms auth delay) -->
+        @if (isLoading()) {
+          <div class="loading-skeleton">
+            <div class="skeleton-bar wide"></div>
+            <div class="skeleton-bar medium"></div>
+          </div>
+        }
+
+        <!-- Submit Button -->
+        <button mat-raised-button color="primary" type="submit"
+                class="submit-btn" id="login-submit"
+                [disabled]="loginForm.invalid || isLoading()">
+          @if (isLoading()) {
+            Signing in...
+          } @else {
+            Sign In
+          }
+        </button>
+
+      </form>
+    </mat-card-content>
+
+    <!-- Demo credentials hint -->
+    <mat-card-footer>
+      <div class="demo-hint">
+        <strong>Demo:</strong> alice&#64;admin.com / Admin&#64;123 &nbsp;|&nbsp;
+        charlie&#64;user.com / User&#64;123
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</div>

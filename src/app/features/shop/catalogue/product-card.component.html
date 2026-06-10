@@ -1,0 +1,27 @@
+<mat-card class="product-card" (click)="cardClick.emit()" [id]="'product-card-' + product.id">
+  <div class="card-image-wrapper">
+    <img mat-card-image [src]="product.thumbnail" [alt]="product.title" class="card-img" loading="lazy" />
+
+    <!-- Live stock badge -->
+    <span class="stock-badge"
+          [class.low]="isLowStock"
+          [class.out]="isOutOfStock">
+      @if (isOutOfStock) { Out of Stock }
+      @else if (isLowStock) { Only {{ liveStock }} left }
+      @else { In Stock: {{ liveStock }} }
+    </span>
+  </div>
+
+  <mat-card-content class="card-body">
+    <p class="product-category">{{ product.category }}</p>
+    <h3 class="product-title">{{ product.title }}</h3>
+    <p class="product-price">${{ product.price }}</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" class="view-btn"
+            [id]="'view-product-' + product.id">
+      View Details
+    </button>
+  </mat-card-actions>
+</mat-card>

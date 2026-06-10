@@ -1,0 +1,47 @@
+<mat-sidenav-container class="admin-container">
+
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened class="admin-sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="sidenav-logo">admin_panel_settings</mat-icon>
+      <span class="sidenav-title">Admin Panel</span>
+    </div>
+
+    <mat-divider />
+
+    <mat-nav-list>
+      @for (link of navLinks; track link.path) {
+        <a mat-list-item
+           [routerLink]="link.path"
+           routerLinkActive="active-link"
+           [id]="'nav-' + link.label.toLowerCase()">
+          <mat-icon matListItemIcon>{{ link.icon }}</mat-icon>
+          <span matListItemTitle>{{ link.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+
+    <!-- User info + logout at the bottom of the sidebar -->
+    <div class="sidenav-footer">
+      <mat-divider />
+      <div class="user-info">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ auth.currentUser()?.name }}</span>
+      </div>
+      <button mat-stroked-button (click)="logout()" id="admin-logout-btn" class="logout-btn">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content Area -->
+  <mat-sidenav-content class="admin-content">
+    <mat-toolbar class="admin-toolbar" color="primary">
+      <span>E-Commerce Admin</span>
+    </mat-toolbar>
+    <div class="content-wrapper">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -1,0 +1,35 @@
+<div class="analytics-page">
+  <h2>Analytics Dashboard</h2>
+
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+    @for (card of summaryCards(); track card.label) {
+      <mat-card class="summary-card" [style.border-left-color]="card.color">
+        <mat-card-content>
+          <div class="card-content">
+            <div class="card-info">
+              <p class="card-label">{{ card.label }}</p>
+              <p class="card-value">{{ card.value }}</p>
+            </div>
+            <mat-icon [style.color]="card.color" class="card-icon">{{ card.icon }}</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+
+  <!-- Recent Orders Summary Table -->
+  <h3>Recent Orders</h3>
+  <div class="recent-orders">
+    @for (order of orderService.orders(); track order.id) {
+      <div class="order-row">
+        <span class="order-id">{{ order.id }}</span>
+        <span>{{ order.customerName }}</span>
+        <span class="order-status" [class]="'status-' + order.status.toLowerCase()">
+          {{ order.status }}
+        </span>
+        <span class="order-total">${{ order.total }}</span>
+      </div>
+    }
+  </div>
+</div>

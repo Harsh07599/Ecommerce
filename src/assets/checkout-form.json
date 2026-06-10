@@ -1,0 +1,66 @@
+[
+  {
+    "name": "email",
+    "type": "email",
+    "label": "Email Address",
+    "placeholder": "Enter your email",
+    "validators": ["required", "email"]
+  },
+  {
+    "name": "fullName",
+    "type": "text",
+    "label": "Full Name",
+    "placeholder": "Enter your full name",
+    "validators": ["required", "minLength:2"]
+  },
+  {
+    "name": "phone",
+    "type": "tel",
+    "label": "Phone Number",
+    "placeholder": "Enter your phone number",
+    "validators": ["required", "pattern:^[0-9]{10}$"]
+  },
+  {
+    "name": "address",
+    "type": "text",
+    "label": "Street Address",
+    "placeholder": "Enter your street address",
+    "validators": ["required"]
+  },
+  {
+    "name": "city",
+    "type": "text",
+    "label": "City",
+    "placeholder": "Enter your city",
+    "validators": ["required"]
+  },
+  {
+    "name": "state",
+    "type": "text",
+    "label": "State / Province",
+    "placeholder": "Enter your state",
+    "validators": ["required"]
+  },
+  {
+    "name": "zip",
+    "type": "text",
+    "label": "ZIP / Postal Code",
+    "placeholder": "Enter ZIP code",
+    "validators": ["required", "pattern:^[0-9]{5,6}$"]
+  },
+  {
+    "name": "country",
+    "type": "select",
+    "label": "Country",
+    "placeholder": "Select country",
+    "validators": ["required"],
+    "options": ["India", "United States", "United Kingdom", "Canada", "Australia"]
+  },
+  {
+    "name": "deliveryNotes",
+    "type": "textarea",
+    "label": "Delivery Notes",
+    "placeholder": "Any special delivery instructions (optional)",
+    "validators": []
+  }
+]

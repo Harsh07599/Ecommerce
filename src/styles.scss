@@ -1,0 +1,28 @@
+// Angular Material pre-built theme is already applied via angular.json
+// (indigo-pink theme is linked in the styles array by ng add @angular/material)
+// We only need global resets and typography here.
+
+// ─── Global Reset ──────────────────────────────────────────────────────────
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: #f5f5f5;
+  color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+}
+
+// ─── Global Utilities ──────────────────────────────────────────────────────
+a {
+  color: #3f51b5;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+}

@@ -1,0 +1,72 @@
+@if (product(); as p) {
+  <div class="detail-page">
+
+    <!-- Back link -->
+    <button mat-button routerLink="/shop/catalogue" id="back-to-catalogue">
+      <mat-icon>arrow_back</mat-icon> Back to Catalogue
+    </button>
+
+    <!-- Main product section -->
+    <div class="product-main">
+      <div class="product-images">
+        <img [src]="p.thumbnail" [alt]="p.title" class="main-image" />
+      </div>
+
+      <div class="product-info">
+        <span class="category-tag">{{ p.category }}</span>
+        <h1>{{ p.title }}</h1>
+        <p class="price">${{ p.price }}</p>
+        <p class="description">{{ p.description }}</p>
+
+        <!-- Stock status -->
+        <p class="stock-info" [class.out-of-stock]="p.stock === 0">
+          {{ p.stock === 0 ? '⚠️ Out of Stock' : '✅ In Stock: ' + p.stock + ' units' }}
+        </p>
+
+        <!-- Quantity selector — disabled if out of stock -->
+        @if (p.stock > 0) {
+          <div class="qty-selector">
+            <button mat-icon-button (click)="decreaseQty()" id="qty-decrease"
+                    [disabled]="quantity() === 1">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="qty-value" id="qty-display">{{ quantity() }}</span>
+            <button mat-icon-button (click)="increaseQty()" id="qty-increase"
+                    [disabled]="quantity() >= p.stock">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <button mat-raised-button color="primary" class="add-to-cart-btn"
+                  (click)="addToCart()" id="add-to-cart-btn">
+            <mat-icon>shopping_cart</mat-icon>
+            Add to Cart
+          </button>
+        } @else {
+          <!-- Out of stock: show Notify me placeholder -->
+          <button mat-stroked-button disabled class="notify-btn" id="notify-me-btn">
+            <mat-icon>notifications</mat-icon>
+            Notify Me When Available
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    @if (relatedProducts().length > 0) {
+      <div class="related-section">
+        <h2>Related Products</h2>
+        <div class="related-grid">
+          @for (rel of relatedProducts(); track rel.id) {
+            <div class="related-card" (click)="navigateToRelated(rel.id)"
+                 [id]="'related-' + rel.id">
+              <img [src]="rel.thumbnail" [alt]="rel.title" />
+              <p class="rel-title">{{ rel.title }}</p>
+              <p class="rel-price">${{ rel.price }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

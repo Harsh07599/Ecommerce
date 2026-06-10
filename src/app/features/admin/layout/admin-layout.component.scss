@@ -1,0 +1,91 @@
+.admin-container {
+  height: 100vh;
+}
+
+.admin-sidenav {
+  width: 240px;
+  background: #757fee;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+
+  .sidenav-logo {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: #90caf9;
+  }
+
+  .sidenav-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+  }
+}
+
+/* Style nav links */
+mat-nav-list a {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 8px;
+  margin: 2px 8px;
+
+  mat-icon { color: rgba(255, 255, 255, 0.7); }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+  }
+
+  &.active-link {
+    background: rgba(144, 202, 249, 0.2) !important;
+    color: #90caf9 !important;
+
+    mat-icon { color: #90caf9; }
+  }
+}
+
+/* Push footer to the bottom */
+.sidenav-footer {
+  margin-top: auto;
+  padding: 8px;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+
+    mat-icon { font-size: 20px; }
+  }
+}
+
+.logout-btn {
+  width: 100%;
+  color: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.admin-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  padding: 24px;
+  flex: 1;
+}

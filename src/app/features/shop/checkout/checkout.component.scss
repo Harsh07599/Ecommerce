@@ -1,0 +1,124 @@
+.checkout-page {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  h1 { margin: 0; font-size: 26px; font-weight: 700; }
+  h2 { margin: 0 0 16px; font-size: 20px; }
+}
+
+/* Step indicator */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #666;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .step-label {
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+  }
+
+  &.active .step-number {
+    background: #3f51b5;
+    color: white;
+  }
+
+  &.done .step-number {
+    background: #4caf50;
+    color: white;
+  }
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: #e0e0e0;
+  margin-bottom: 16px;
+  transition: background 0.3s;
+
+  &.done { background: #4caf50; }
+}
+
+/* Step content card */
+.step-content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Cart review */
+.cart-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 8px;
+
+  .item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+  .item-details { flex: 1; }
+  .item-name  { font-weight: 600; margin: 0 0 4px; }
+  .item-price { color: #888; font-size: 13px; margin: 0; }
+  .item-total { font-weight: 700; font-size: 16px; color: #3f51b5; }
+}
+
+/* Order summary totals */
+.order-summary {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+  margin-bottom: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 15px;
+
+  &.total {
+    font-size: 18px;
+    font-weight: 700;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+}
+
+/* Payment form */
+.payment-form { display: flex; flex-direction: column; gap: 8px; }
+.full-width { width: 100%; }
+.card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Step nav actions */
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
