@@ -16,16 +16,24 @@
       In Stock Only
     </mat-slide-toggle>
 
-    <!-- Category chips -->
+    <!-- Price range slider -->
+    <div class="price-filter">
+      <label class="price-label">Max Price: <strong>${{ filterForm.value.maxPrice }}</strong></label>
+      <mat-slider min="1" max="10000" step="50" class="price-slider" id="price-slider">
+        <input matSliderThumb formControlName="maxPrice" />
+      </mat-slider>
+    </div>
+
+    <!-- Category chips (multi-select) -->
     <div class="category-chips">
       <button mat-stroked-button
-              [class.active]="!filterForm.value.category"
-              (click)="selectCategory('')" id="cat-all">
+              [class.active]="(filterForm.value.categories ?? []).length === 0"
+              (click)="filterForm.patchValue({ categories: [] })" id="cat-all">
         All
       </button>
       @for (cat of categories(); track cat) {
         <button mat-stroked-button
-                [class.active]="filterForm.value.category === cat"
+                [class.active]="isCategorySelected(cat)"
                 (click)="selectCategory(cat)"
                 [id]="'cat-' + cat">
           {{ cat }}
@@ -81,7 +89,8 @@
 
     <mat-paginator
       [length]="total()"
-      [pageSize]="pageSize"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
       [pageSizeOptions]="[12, 24, 48]"
       (page)="onPageChange($event)"
       showFirstLastButtons>
