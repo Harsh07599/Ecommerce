@@ -1,0 +1,22 @@
+ <div class="confirmation-page">
+      <div class="confirmation-card">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+        <h1>Order Placed!</h1>
+        <p class="order-id">Order ID: <strong>{{ orderId }}</strong></p>
+
+        @if (order()) {
+          <div class="order-details">
+            <p>Thank you, {{ order()!.customerName }}! Your order has been confirmed.</p>
+            <p><strong>Total Paid:</strong> \${{ order()!.total }}</p>
+            <p><strong>Items:</strong> {{ order()!.items.length }}</p>
+            <p><strong>Date:</strong> {{ order()!.createdAt | date:'medium' }}</p>
+          </div>
+        }
+
+        <div class="actions">
+          <button mat-raised-button color="primary" routerLink="/shop/catalogue" id="continue-shopping-btn">
+            <mat-icon>shopping_bag</mat-icon> Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>

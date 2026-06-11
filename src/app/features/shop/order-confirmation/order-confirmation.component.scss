@@ -1,0 +1,28 @@
+.confirmation-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 60vh;
+    }
+    .confirmation-card {
+      text-align: center;
+      background: white;
+      border-radius: 16px;
+      padding: 48px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 480px;
+    }
+    .success-icon {
+      font-size: 72px; width: 72px; height: 72px;
+      color: #4caf50; margin-bottom: 16px;
+    }
+    h1 { margin: 0 0 8px; }
+    .order-id { color: #666; margin: 0 0 24px; }
+    .order-details {
+      text-align: left;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+      p { margin: 6px 0; }
+    }
