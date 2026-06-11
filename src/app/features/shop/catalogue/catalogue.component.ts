@@ -19,7 +19,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ProductService } from '../../../core/services/product.service';
 import { StockWebsocketService } from '../../../core/services/stock-websocket.service';
 import { Product } from '../../../core/services/product.model';
-import { ProductCardComponent } from './product-card.component';
+import { ProductCardComponent } from './product-card/product-card.component';
 
 @Component({
   selector: 'app-catalogue',

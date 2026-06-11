@@ -1,4 +1,8 @@
 <div class="checkout-page">
+  @if(currentStep() === 1){
+@
+  }
+  
   <h1>Checkout</h1>
 
   <!-- Step indicator -->
@@ -26,15 +30,42 @@
               <img [src]="item.thumbnail" [alt]="item.productName" class="item-img" />
               <div class="item-details">
                 <p class="item-name">{{ item.productName }}</p>
-                <p class="item-price">${{ item.unitPrice }} × {{ item.quantity }}</p>
+                <p class="item-price">${{ item.unitPrice }} each</p>
               </div>
-              <span class="item-total">${{ item.unitPrice * item.quantity }}</span>
+
+              <!-- Quantity adjuster -->
+              <div class="qty-controls">
+                <button mat-icon-button
+                        (click)="decreaseItemQty(item.productId, item.quantity)"
+                        [id]="'qty-dec-' + item.productId"
+                        class="qty-btn">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="qty-value">{{ item.quantity }}</span>
+                <button mat-icon-button
+                        (click)="increaseItemQty(item.productId, item.quantity, item.maxStock)"
+                        [disabled]="item.quantity >= item.maxStock"
+                        [id]="'qty-inc-' + item.productId"
+                        class="qty-btn">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <span class="item-total">${{ (item.unitPrice * item.quantity).toFixed(2) }}</span>
+
+              <!-- Remove button -->
+              <button mat-icon-button color="warn"
+                      (click)="removeCartItem(item.productId)"
+                      [id]="'remove-' + item.productId"
+                      matTooltip="Remove item">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
             </div>
           }
         </div>
 
         <!-- Totals computed by pure CartTotalPipe -->
-        @let totals = cartItems() | cartTotal; 
+        @let totals = cartItems() | cartTotal;
         <div class="order-summary">
           <div class="summary-row"><span>Subtotal</span><span>${{ totals.subtotal }}</span></div>
           <div class="summary-row"><span>Tax (10%)</span><span>${{ totals.tax }}</span></div>
@@ -77,18 +108,11 @@
 
       <form [formGroup]="paymentForm" class="payment-form">
 
-        <!-- Card Number with Luhn validation -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Card Number</mat-label>
-          <input matInput formControlName="cardNumber"
-                 placeholder="4242 4242 4242 4242" id="card-number" maxlength="19" />
-          <mat-icon matPrefix>credit_card</mat-icon>
-          @if (paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched) {
-            <mat-error>
-              {{ paymentForm.get('cardNumber')?.errors?.['luhn'] || 'Card number is required' }}
-            </mat-error>
-          }
-        </mat-form-field>
+        <!-- Card Number — Custom ControlValueAccessor with real-time Luhn validation.
+             The CVA component handles formatting (XXXX XXXX XXXX XXXX) and registers
+             itself via NG_VALIDATORS so the parent FormGroup picks up Luhn errors. -->
+        <app-card-number-input formControlName="cardNumber"></app-card-number-input>
+
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Cardholder Name</mat-label>
@@ -116,28 +140,20 @@
           </mat-form-field>
         </div>
 
-        <!-- Billing address toggle -->
-        <mat-checkbox (change)="billingDifferent.set($event.checked)" id="billing-toggle">
+        <!-- Billing address toggle — sets billingDifferent form control to true/false.
+             DynamicFormComponent's isVisible() evaluates "billingDifferent==true"
+             against the paymentForm, so the billing fields appear/hide automatically. -->
+        <mat-checkbox formControlName="billingDifferent" id="billing-toggle">
           Billing address is different from delivery address
         </mat-checkbox>
 
-        <!-- Billing fields (visibleWhen equivalent — shown only when toggle is on) -->
-        @if (billingDifferent()) {
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Billing Address</mat-label>
-            <input matInput formControlName="billAddress" id="billing-address" />
-          </mat-form-field>
-          <div class="card-row">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>City</mat-label>
-              <input matInput formControlName="billCity" id="billing-city" />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>ZIP</mat-label>
-              <input matInput formControlName="billZip" id="billing-zip" />
-            </mat-form-field>
-          </div>
-        }
+        <!-- Billing address fields — rendered by DynamicFormComponent using visibleWhen.
+             This reuses the same shared DynamicFormComponent pattern from Step 2 (delivery)
+             and the Admin product form, rather than duplicating @if logic here. -->
+        <app-dynamic-form
+          [config]="billingFieldConfig.slice(1)"
+          [formGroup]="paymentForm">
+        </app-dynamic-form>
       </form>
 
       <div class="step-actions">

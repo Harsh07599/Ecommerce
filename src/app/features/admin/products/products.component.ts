@@ -23,7 +23,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ProductService } from '../../../core/services/product.service';
 import { StockWebsocketService } from '../../../core/services/stock-websocket.service';
 import { Product } from '../../../core/services/product.model';
-import { ProductFormDialogComponent } from './product-form-dialog.component';
+import { ProductFormDialogComponent } from './product-form-dialog.component/product-form-dialog.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
