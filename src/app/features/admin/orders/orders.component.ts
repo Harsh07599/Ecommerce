@@ -4,6 +4,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -21,7 +22,7 @@ import { Order, OrderStatus } from '../../../core/services/order.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule, ReactiveFormsModule,
-    MatTableModule, MatPaginatorModule, MatSelectModule,
+    MatTableModule, MatPaginatorModule, MatSortModule, MatSelectModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
     MatIconModule, MatSidenavModule, MatChipsModule,
   ],
@@ -46,7 +47,9 @@ export class OrdersComponent {
   pageSize = 10;
   pageIndex = 0;
 
-  displayedColumns = ['id', 'customerName', 'total', 'status', 'createdAt'];
+  displayedColumns = ['id', 'customerName', 'products', 'total', 'status', 'createdAt'];
+  sortField = 'createdAt';
+  sortDir: 'asc' | 'desc' = 'desc';
 
   // ─── Filtered + paginated orders ──────────────────────────────────────────
   // Computed from the signal store — reacts instantly when status is updated
@@ -58,19 +61,25 @@ export class OrdersComponent {
       orders = orders.filter(o => o.status === this.selectedStatus());
     }
 
-    // Apply date range filter
-    const from = this.filterForm.value.from;
-    const to   = this.filterForm.value.to;
-    if (from) orders = orders.filter(o => o.createdAt >= from!);
-    if (to)   orders = orders.filter(o => o.createdAt <= to! + 'T23:59:59');
-
     return orders;
   });
 
-  // Current page slice of filtered orders
+  // Sorted filtered orders — recomputed when sortField/sortDir change
+  sortedOrders = computed(() => {
+    const field = this.sortField;
+    const dir   = this.sortDir;
+    return [...this.filteredOrders()].sort((a, b) => {
+      const aVal = (a as any)[field] ?? '';
+      const bVal = (b as any)[field] ?? '';
+      const cmp  = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+      return dir === 'asc' ? cmp : -cmp;
+    });
+  });
+
+  // Current page slice
   pagedOrders = computed(() => {
     const start = this.pageIndex * this.pageSize;
-    return this.filteredOrders().slice(start, start + this.pageSize);
+    return this.sortedOrders().slice(start, start + this.pageSize);
   });
 
   // ─── Open order detail in the side-panel (not a new route) ────────────────
@@ -92,11 +101,23 @@ export class OrdersComponent {
     this.pageSize  = event.pageSize;
   }
 
+  // ─── Sort handler ────────────────────────────────────────────────────────────────
+  onSortChange(sort: Sort): void {
+    this.sortField = sort.active || 'createdAt';
+    this.sortDir   = (sort.direction as 'asc' | 'desc') || 'desc';
+    this.pageIndex = 0;
+  }
+
   // Get status chip color
   getStatusColor(status: OrderStatus): string {
     const map: Record<OrderStatus, string> = {
       Pending: 'warn', Confirmed: 'primary', Cancelled: 'accent'
     };
     return map[status];
+  }
+
+  // ─── Summarise product names for the orders table Products column ────────────
+  getProductNames(order: Order): string {
+    return order.items.map(i => i.productName).join(', ');
   }
 }

@@ -14,42 +14,38 @@
     }
   </div>
 
-  <!-- Date Range Filter -->
-  <div class="date-filter" [formGroup]="filterForm">
-    <mat-form-field appearance="outline">
-      <mat-label>From Date</mat-label>
-      <input matInput type="date" formControlName="from" id="date-from" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>To Date</mat-label>
-      <input matInput type="date" formControlName="to" id="date-to" />
-    </mat-form-field>
-  </div>
-
   <!-- Orders Table + Side Panel layout -->
   <div class="orders-layout" [class.panel-open]="selectedOrder()">
 
     <!-- Orders Table -->
     <div class="table-wrapper mat-elevation-z2">
-      <table mat-table [dataSource]="pagedOrders()">
+      <table mat-table [dataSource]="pagedOrders()" matSort (matSortChange)="onSortChange($event)"
+             matSortActive="createdAt" matSortDirection="desc">
 
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>Order ID</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Order ID</th>
           <td mat-cell *matCellDef="let order">{{ order.id }}</td>
         </ng-container>
 
         <ng-container matColumnDef="customerName">
-          <th mat-header-cell *matHeaderCellDef>Customer</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
           <td mat-cell *matCellDef="let order">{{ order.customerName }}</td>
         </ng-container>
 
+        <ng-container matColumnDef="products">
+          <th mat-header-cell *matHeaderCellDef>Product(s)</th>
+          <td mat-cell *matCellDef="let order" class="products-cell">
+            {{ getProductNames(order) }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="total">
-          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
           <td mat-cell *matCellDef="let order">${{ order.total }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
           <td mat-cell *matCellDef="let order">
             <span class="status-chip" [class]="'status-' + order.status.toLowerCase()">
               {{ order.status }}
@@ -58,7 +54,7 @@
         </ng-container>
 
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
           <td mat-cell *matCellDef="let order">{{ order.createdAt | date:'mediumDate' }}</td>
         </ng-container>
 

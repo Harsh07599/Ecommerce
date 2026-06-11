@@ -1,5 +1,8 @@
-import { Injectable, signal } from '@angular/core';
-import { Order, OrderStatus, OrderItem } from './order.model';
+import { Injectable, signal, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { Order, OrderStatus } from './order.model';
 
 // Seeded mock orders — shared between admin order view (Task 2) and user order history (Task 3)
 const MOCK_ORDERS: Order[] = [
@@ -41,6 +44,8 @@ const MOCK_ORDERS: Order[] = [
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
+  private http    = inject(HttpClient);
+
   // Orders are stored as a signal so any component can react to changes instantly
   private _orders = signal<Order[]>(MOCK_ORDERS);
 
@@ -62,9 +67,30 @@ export class OrderService {
     );
   }
 
-  // ─── Add a new order ───────────────────────────────────────────────────────
-  // Called from checkout step 3 on successful submission
+  // ─── Add a new order ─────────────────────────────────────────────────────────────────
+  // Called optimistically before the API confirms
   addOrder(order: Order): void {
     this._orders.update(orders => [order, ...orders]);
+  }
+
+  // ─── Remove an order by ID (used for rollback on API failure) ─────────────────────
+  removeOrder(orderId: string): void {
+    this._orders.update(orders => orders.filter(o => o.id !== orderId));
+  }
+
+  // ─── Submit order to mock API endpoint ─────────────────────────────────────────
+  // Uses dummyjson /carts/add as a stand-in for a real order endpoint.
+  // Waits 800ms first to simulate network latency.
+  submitOrder(order: Order): Observable<any> {
+    return timer(800).pipe(
+      switchMap(() =>
+        this.http.post('https://dummyjson.com/carts/add', {
+          userId: Number(order.customerId) || 1,
+          products: order.items.map(i => ({
+            id: i.productId, quantity: i.quantity,
+          })),
+        })
+      )
+    );
   }
 }

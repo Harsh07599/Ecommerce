@@ -3,8 +3,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
 
 // Angular Material
 import { MatTableModule } from '@angular/material/table';
@@ -79,23 +78,45 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCategories();
-    this.loadProducts();
     this.subscribeToStockUpdates();
 
-    // Re-fetch when filters change — debounced to avoid firing on every keystroke
+    // Re-fetch when filters change — debounced + switchMap cancels in-flight requests
+    // startWith(null) triggers the initial load so we don't need a separate loadProducts() call
     this.filterForm.valueChanges
       .pipe(
+        startWith(null),
         debounceTime(300),
         distinctUntilChanged(),
+        switchMap(() => {
+          this.pageIndex = 0;
+          this.isLoading.set(true);
+          const { search, category } = this.filterForm.value;
+          return this.productService.getProducts({
+            search: search || undefined,
+            category: category || undefined,
+            skip: this.pageIndex * this.pageSize,
+            limit: this.pageSize,
+            sortBy: this.sortBy || undefined,
+            order: this.sortOrder,
+          });
+        }),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe(() => {
-        this.pageIndex = 0; // reset to first page on filter change
-        this.loadProducts();
+      .subscribe({
+        next: page => {
+          this.products.set(page.products);
+          this.totalProducts.set(page.total);
+          this.isLoading.set(false);
+          this.stockWs.setVisibleProducts(page.products.map(p => p.id));
+        },
+        error: () => {
+          this.isLoading.set(false);
+          this.snackBar.open('Failed to load products', 'Dismiss', { duration: 3000 });
+        },
       });
   }
 
-  // ─── Load products from the API ────────────────────────────────────────────
+  // ─── Load products from the API (called by pagination and sort changes) ─────
   loadProducts(): void {
     this.isLoading.set(true);
     const { search, category } = this.filterForm.value;
@@ -115,8 +136,6 @@ export class ProductsComponent implements OnInit {
           this.products.set(page.products);
           this.totalProducts.set(page.total);
           this.isLoading.set(false);
-
-          // Register visible product IDs with the WS service
           this.stockWs.setVisibleProducts(page.products.map(p => p.id));
         },
         error: () => {
