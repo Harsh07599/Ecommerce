@@ -48,28 +48,7 @@ import { MatIconModule } from '@angular/material/icon';
       multi: true,
     },
   ],
-  template: `
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Card Number</mat-label>
-      <mat-icon matPrefix>credit_card</mat-icon>
-      <input
-        matInput
-        type="text"
-        inputmode="numeric"
-        maxlength="19"
-        [value]="displayValue()"
-        [disabled]="isDisabled()"
-        (input)="onInput($event)"
-        (blur)="onTouched()"
-        placeholder="4242 4242 4242 4242"
-        id="card-number"
-        autocomplete="cc-number"
-      />
-      @if (errorMessage()) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-    </mat-form-field>
-  `,
+  templateUrl: 'card-number-input.component.html',
   styles: [`.full-width { width: 100%; }`],
 })
 export class CardNumberInputComponent implements ControlValueAccessor, Validator {
